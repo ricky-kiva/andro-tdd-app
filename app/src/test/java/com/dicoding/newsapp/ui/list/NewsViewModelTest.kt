@@ -14,6 +14,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import com.dicoding.newsapp.data.Result
+import com.dicoding.newsapp.utils.LiveDataTestUtil.getOrAwaitValue
 import org.junit.Rule
 import org.mockito.Mockito
 
@@ -53,15 +54,35 @@ class NewsViewModelTest {
             `when`(newsRepository.getHeadlineNews()).thenReturn(expectedNews)
 
             // calls mocked `getHeadlineNews()` & should return `expectedNews`
-            // it also starts observing the object
-            val actualNews = newsViewModel.getHeadlineNews().observeForever(observer)
+            // it also starts observing the object with `custom` LiveData Utils
+            val actualNews = newsViewModel.getHeadlineNews().getOrAwaitValue()
 
             // this verifies whether getHeadlineNews() called during the test
             Mockito.verify(newsRepository).getHeadlineNews()
             Assert.assertNotNull(actualNews)
+            Assert.assertTrue(actualNews is Result.Success)
+            Assert.assertEquals(dummyNews.size, (actualNews as Result.Success).data.size)
         } finally {
             // remove observer from LiveData after test finished
             newsViewModel.getHeadlineNews().removeObserver(observer)
         }
+    }
+
+    @Test
+    fun `when Network Error should return Error`() {
+        // set `Mock Implementation` for `getHeadlineNews` of `newsRepository` object
+        val headlineNews = MutableLiveData<Result<List<NewsEntity>>>()
+        headlineNews.value = Result.Error("Error")
+        `when`(newsRepository.getHeadlineNews()).thenReturn(headlineNews)
+
+        // calls mocked `getHeadlineNews()` & should return `expectedNews`
+        val actualNews = newsViewModel.getHeadlineNews().getOrAwaitValue()
+
+        // this verifies whether getHeadlineNews() called during the test
+        Mockito.verify(newsRepository).getHeadlineNews()
+
+        // start asserting result
+        Assert.assertNotNull(actualNews)
+        Assert.assertTrue(actualNews is Result.Error)
     }
 }
