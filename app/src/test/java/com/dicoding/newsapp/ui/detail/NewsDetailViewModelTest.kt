@@ -5,11 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import com.dicoding.newsapp.data.NewsRepository
 import com.dicoding.newsapp.utils.DataDummy
 import com.dicoding.newsapp.utils.LiveDataTestUtil.getOrAwaitValue
+import com.dicoding.newsapp.utils.MainDispatcherRule
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.*
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -21,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class NewsDetailViewModelTest {
+
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
@@ -35,17 +35,8 @@ class NewsDetailViewModelTest {
         newsDetailViewModel.setNewsData(dummyDetailNews)
     }
 
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-
-    @Before
-    fun setupDispatcher() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDownDispatcher() {
-        Dispatchers.resetMain()
-    }
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `when bookmarkStatus false should call saveNews`() = runTest {
