@@ -41,3 +41,15 @@ class HomeActivity : AppCompatActivity() {
 // - Write code that pass the test: Make production code to feed the test and pass
 // - Refactor -> Clean, simplify, optimize the logic & make the code modular
 // - Repeat: back write failing test when adding new functionality. Do commit as often as possible
+
+// Best practice is to test code that is really needed for the functionality
+// - Example in this case:
+// --- ViewModel -> Repository -> Remote / Local Datasource
+// - It could also be called as:
+// --- System Under Test (SUT) -> Collaborator -> Datasource
+// - We only need to test the ViewModel, because the main function is within there
+
+// Test Double is imitation object to replace the real object when testing. There are types of Test Double:
+// - Fake: imitation object that has similar implementation as the real object. No need `mocking framework` for this. Example: use ArrayList when the real object is a database
+// - Dummy: imitation object that only being needed only for parameter. It could be any data or even empty data
+// - Mock: imitation object with `behavior` like the
