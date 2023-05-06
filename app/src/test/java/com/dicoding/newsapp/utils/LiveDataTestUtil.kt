@@ -44,7 +44,7 @@ object LiveDataTestUtil {
         return data as T
     }
 
-    // optional: observe livedata until block is executed
+    // observe livedata until block is finished executed, after that removeObserver
     suspend fun <T> LiveData<T>.observeForTesting(block: suspend () -> Unit) {
         val observer = Observer<T>{}
         try {

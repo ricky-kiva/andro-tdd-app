@@ -26,9 +26,11 @@ class NewsRepository(
                     article.url
                 )
             }
+            // `emit` sets value & triggers notification to any observers that are currently observing the <Result.Success()> LiveData object
             emit(Result.Success(newsList))
         } catch (e: Exception) {
             Log.d("NewsRepository", "getHeadlineNews: ${e.message.toString()} ")
+            // `emit` sets value & triggers notification to any observers that are currently observing the <Result.Error()> LiveData object
             emit(Result.Error(e.message.toString()))
         }
     }
