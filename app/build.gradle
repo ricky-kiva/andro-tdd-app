@@ -61,8 +61,12 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:3.12.4'
 
     // - special testing
-    testImplementation "androidx.arch.core:core-testing:2.1.0" // for LiveData
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1" // for adjusting dispatcher
+    testImplementation "androidx.arch.core:core-testing:2.1.0" // for LiveData (InstantTaskExecutorRule)
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1" // for adjusting dispatcher (TestDispatcher)
+
+    // - special instrumentation testing
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0" // for LiveData (InstantTaskExecutorRule)
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1" // for adjusting dispatcher (TestDispatcher)
 
     // room
     implementation "androidx.room:room-runtime:2.4.2"
