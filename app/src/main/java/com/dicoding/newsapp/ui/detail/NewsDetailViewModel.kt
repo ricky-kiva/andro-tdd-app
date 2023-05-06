@@ -13,6 +13,7 @@ class NewsDetailViewModel(private val newsRepository: NewsRepository) : ViewMode
         newsData.value = news
     }
 
+    // switchMap changes bookmarkStatus everytime there is a change in `newsData` var
     val bookmarkStatus = newsData.switchMap {
         newsRepository.isNewsBookmarked(it.title)
     }

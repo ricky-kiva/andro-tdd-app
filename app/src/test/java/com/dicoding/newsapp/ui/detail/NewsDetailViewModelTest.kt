@@ -6,9 +6,7 @@ import com.dicoding.newsapp.data.NewsRepository
 import com.dicoding.newsapp.utils.DataDummy
 import com.dicoding.newsapp.utils.LiveDataTestUtil.getOrAwaitValue
 import com.dicoding.newsapp.utils.MainDispatcherRule
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.*
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,8 +43,30 @@ class NewsDetailViewModelTest {
         expectedBoolean.value = false
         `when`(newsRepository.isNewsBookmarked(dummyDetailNews.title)).thenReturn(expectedBoolean)
 
+        // calls mocked `bookmarkStatus` & should return `expectedBoolean`
+        // note: bookmarkStatus call `isNewsBookmarked` from `newsRepository`
+        newsDetailViewModel.bookmarkStatus.getOrAwaitValue()
+
+        // calls changeBookmark using dummyDetailNews
+        newsDetailViewModel.changeBookmark(dummyDetailNews)
+
+        // this verifies whether saveNews() called during the test
+        Mockito.verify(newsRepository).saveNews(dummyDetailNews)
+    }
+
+    @Test
+    fun `when bookmarkStatus true should call deleteNews`() = runTest {
+        // 1st - 3rd line -> set `Mock Implementation` for `isNewsBookmarked()` of `newsRepository` object
+        val expectedBoolean = MutableLiveData<Boolean>()
+        expectedBoolean.value = true
+        `when`(newsRepository.isNewsBookmarked(dummyDetailNews.title)).thenReturn(expectedBoolean)
+
+        // calls mocked `bookmarkStatus` & should return `expectedBoolean`
+        // note: bookmarkStatus call `isNewsBookmarked` from `newsRepository`
         newsDetailViewModel.bookmarkStatus.getOrAwaitValue()
         newsDetailViewModel.changeBookmark(dummyDetailNews)
-        Mockito.verify(newsRepository).saveNews(dummyDetailNews)
+
+        // this verifies whether deleteNews() called during the test
+        Mockito.verify(newsRepository).deleteNews(dummyDetailNews.title)
     }
 }
