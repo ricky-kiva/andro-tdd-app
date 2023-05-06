@@ -52,4 +52,8 @@ class HomeActivity : AppCompatActivity() {
 // Test Double is imitation object to replace the real object when testing. There are types of Test Double:
 // - Fake: imitation object that has similar implementation as the real object. No need `mocking framework` for this. Example: use ArrayList when the real object is a database
 // - Dummy: imitation object that only being needed only for parameter. It could be any data or even empty data
-// - Mock: imitation object with `behavior` like the
+// - Mock: imitation object with `behavior` like the real object & has expectation for the `interaction result`. It used to test interaction between objects as they allow to verify the code under test is calling expected methods with expected arguments
+// - Stub: imitation object with `behavior` like the real object but has no expectation for the `interaction result`. It used to enforce specific behavior on code under test without concerning the order of number of the method calls
+// - Spy: Wrapper for object without changing any of the method's implementation. It let user knows whether a function has already been called or not, and how much time it's being called.
+
+// As long as an object still could be easily made and not dependent to outer source (database/network), it's better to use real object rather than a Test Double.
