@@ -13,6 +13,7 @@ class NewsRepository(
     private val newsDao: NewsDao
 ) {
     fun getHeadlineNews(): LiveData<Result<List<NewsEntity>>> = liveData {
+        // `emit` sets value & triggers notification to any observers that are currently observing the <Result.Loading> LiveData object
         emit(Result.Loading)
         try {
             val response = apiService.getNews(BuildConfig.API_KEY)
